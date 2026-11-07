@@ -610,14 +610,15 @@ local Settings = Instance.new("UIListLayout")
 Settings.Name = "HDSettings"
 Settings.Parent = TabSettings
 
-local function NSetting(Setting, TabAcessingS)
+local function NSetting(Setting, TabAcessingS, Color1, Color2, Color3)
 local NewSetting = Instance.new("TextButton")
 NewSetting.Name = "HDSetting"
 NewSetting.Parent = TabSettings
 NewSetting.Size = UDim2.new(0, 340, 0, 30)
 NewSetting.Text = Setting
-NewSetting.BackgroundColor3 = Color3.fromRGB(100, 0, 0)
+NewSetting.BackgroundColor3 = Color3.fromRGB(Color1, Color2, Color3)
 NewSetting.TextSize = 15
+NewSetting.TextColor3 = Color3.fromRGB(255, 255, 255)
 NewSetting.MouseButton1Click:Connect(TabAcessingS)
 return NewSetting
 end
@@ -662,6 +663,7 @@ NCmd(";jail [Player]")
 NCmd(";shutdown")
 NCmd(";persistentpunish [Player]")
 NCmd(";unpersistentpunish [Player] or No Player")
-NSetting("Theme:", function()
-
+NSetting("Theme:", 255, 255, 0, function()
+HD.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
+HDLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
 end)
