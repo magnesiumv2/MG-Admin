@@ -729,4 +729,4 @@ HD.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
 HDLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
 end)
 
-Admin(" ...player.Name")
+Admin("Magnesium")
