@@ -787,21 +787,6 @@ TabSettings.Visible = false
 TabCmds.Visible = false
 end)
 
-local ReturnTabs1 = Instance.new("TextButton")
-ReturnTabs1.Name = "Return"
-ReturnTabs1.Parent = TabSettings
-ReturnTabs1.Size = UDim2.new(0, 330, 0, 30)
-ReturnTabs1.Text = "<"
-ReturnTabs1.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
-ReturnTabs1.TextColor3 = Color3.fromRGB(255, 255, 255)
-ReturnTabs1.TextSize = 15
-ReturnTabs1.MouseButton1Click:Connect(function()
-NTabs.Visible = true
-TabSettings.Visible = false
-TabCmds.Visible = false
-ADMINS.Visible = false
-end)
-
 local ADMINS = Instance.new("ScrollingFrame")
 ADMINS.Name = "Admins"
 ADMINS.Parent = HD
@@ -811,6 +796,21 @@ ADMINS.Size = UDim2.new(0, 330, 0, 320)
 ADMINS.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
 ADMINS.ScrollBarThickness = 0
 ADMINS.BorderSizePixel = 0
+
+local ReturnTabs2 = Instance.new("TextButton")
+ReturnTabs2.Name = "Return"
+ReturnTabs2.Parent = ADMINS
+ReturnTabs2.Size = UDim2.new(0, 330, 0, 30)
+ReturnTabs2.Text = "<"
+ReturnTabs2.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
+ReturnTabs2.TextColor3 = Color3.fromRGB(255, 255, 255)
+ReturnTabs2.TextSize = 15
+ReturnTabs2.MouseButton1Click:Connect(function()
+NTabs.Visible = true
+TabSettings.Visible = false
+TabCmds.Visible = false
+ADMINS.Visible = false
+end)
 
 local function Admin(ADMIN)
 local NewAdmin = Instance.new("TextLabel")
@@ -834,12 +834,27 @@ ABOUT.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
 ABOUT.ScrollBarThickness = 0
 ABOUT.BorderSizePixel = 0
 
-local function ABOUT(ADMIN)
+local ReturnTabs3 = Instance.new("TextButton")
+ReturnTabs2.Name = "Return"
+ReturnTabs2.Parent = ADMINS
+ReturnTabs2.Size = UDim2.new(0, 330, 0, 30)
+ReturnTabs2.Text = "<"
+ReturnTabs2.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
+ReturnTabs2.TextColor3 = Color3.fromRGB(255, 255, 255)
+ReturnTabs2.TextSize = 15
+ReturnTabs2.MouseButton1Click:Connect(function()
+NTabs.Visible = true
+TabSettings.Visible = false
+TabCmds.Visible = false
+ADMINS.Visible = false
+end)
+
+local function ABOUT(ABOUT)
 local NewAbout = Instance.new("TextLabel")
 NewAbout.Name = "HDAdmin"
 NewAbout.Parent = TabSettings
 NewAbout.Size = UDim2.new(0, 340, 0, 30)
-NewAbout.Text = ADMIN
+NewAbout.Text = ABOUT
 NewAbout.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
 NewAbout.TextSize = 15
 NewAbout.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -848,7 +863,11 @@ end
 
 
 NTab("ABOUT                                     >", function()
-
+TabCmds.Visible = false
+NTabs.Visible = false
+TabSettings.Visible = false
+ADMINS.Visible = false
+ABOUT.Visible = true
 end)
 
 NTab("COMMANDS                            >", function()
