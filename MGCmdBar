@@ -1,0 +1,96 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+local UserInputService = game:GetService("UserInputService")
+
+local AdminEvent = ReplicatedStorage:WaitForChild("AdminEvent")
+
+local Prompt = Instance.new("ScreenGui")
+Prompt.Name = "Console"
+Prompt.ResetOnSpawn = false
+Prompt.Parent = PlayerGui
+
+local MobileButton = Instance.new("TextButton")
+MobileButton.Name = "MobileToggle"
+MobileButton.Parent = Prompt
+MobileButton.Position = UDim2.new(0, 10, 0, 10)
+MobileButton.Size = UDim2.new(0, 35, 0, 35)
+MobileButton.Text = "⚙️"
+MobileButton.TextSize = 18
+MobileButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+MobileButton.BackgroundTransparency = 0.5
+MobileButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+local ButtonCorner = Instance.new("UICorner")
+ButtonCorner.CornerRadius = UDim.new(0, 8)
+ButtonCorner.Parent = MobileButton
+
+local Entry = Instance.new("Frame")
+Entry.Name = "Prompt"
+Entry.Parent = Prompt
+Entry.Position = UDim2.new(0.5, -250, 0, 60)
+Entry.Size = UDim2.new(0, 500, 0, 25)
+Entry.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Entry.BackgroundTransparency = 0.5
+Entry.Visible = false
+
+local commandBar = Instance.new("TextBox")
+commandBar.Name = "cmdbar"
+commandBar.Parent = Entry
+commandBar.Position = UDim2.new(0, 0, 0, 0)
+commandBar.Text = ""
+commandBar.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+commandBar.BackgroundTransparency = 1
+commandBar.Size = UDim2.new(0, 500, 0, 25)
+commandBar.PlaceholderText = "command Line"
+commandBar.TextColor3 = Color3.fromRGB(255, 255, 255)
+commandBar.TextSize = 14
+commandBar.TextXAlignment = Enum.TextXAlignment.Left
+commandBar.ClearTextOnFocus = true
+
+local UIPadding = Instance.new("UIPadding")
+UIPadding.PaddingLeft = UDim.new(0, 5)
+UIPadding.Parent = commandBar
+
+local function openCommandBar()
+	Entry.Visible = true
+	commandBar:CaptureFocus()
+	commandBar.Text = ""
+end
+
+MobileButton.MouseButton1Click:Connect(function()
+	if Entry.Visible then
+		Entry.Visible = false
+		commandBar:ReleaseFocus()
+	else
+		openCommandBar()
+	end
+end)
+
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+	if gameProcessed then return end
+	if input.KeyCode == Enum.KeyCode.Semicolon then
+		task.wait()
+		openCommandBar()
+	end
+end)
+
+commandBar.FocusLost:Connect(function(enterPressed)
+	if enterPressed then
+		local rawText = commandBar.Text
+		local command, target, reason = rawText:match("^(%w+)%s+([^%s]+)%s*(.*)$")
+		
+		if not command then
+			command = rawText:match("^(%w+)")
+		end
+		
+		if command then
+			command = string.lower(command)
+			if reason == "" then reason = nil end
+			AdminEvent:FireServer(command, target, reason)
+		end
+	end
+	Entry.Visible = false
+	commandBar.Text = ""
+end)
