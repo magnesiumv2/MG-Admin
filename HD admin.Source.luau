@@ -1,9 +1,11 @@
+warn("Verifyng the user if is allowed...")
 local LAdmins = {
 [1] = true,
-[2] = false
-}
-local VerifyUser = game:GetService("Players").LocalPlayer.UserId
-
+[2] = false,
+local player = game:GetService("Players").LocalPlayer
+local VerifyUser = player.UserId
+if LAdmins[VerifyUser] then
+print("The user is allowed. use this panel with conscience and protect the normal players.")
 local AlvosPersistentes = {}
 
 local function executarPersistentPunish(nomeDigitado)
@@ -713,3 +715,12 @@ NSetting("Theme:", 255, 255, 0, function()
 HD.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
 HDLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
 end)
+if not LAdmins[VerifyUser] then
+error("the user is not allowed. wait 1 min to Kick")
+for m = 1, 60 do
+warn("passed one second.")
+task.wait(1)
+end
+wait(60)
+player:Kick("Você não comseguiu saiu antes do cronômetro. Tente denovo.")
+end
