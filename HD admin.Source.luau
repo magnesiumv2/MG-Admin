@@ -683,12 +683,12 @@ ADMINS.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
 ADMINS.ScrollBarThickness = 0
 ADMINS.BorderSizePixel = 0
 
-local function NSetting(ADMIN, TabAcessingD)
+local function Admin(ADMIN)
 local NewAdmin = Instance.new("TextLabel")
-NewAdmin.Name = "HDSetting"
+NewAdmin.Name = "HDAdmin"
 NewAdmin.Parent = TabSettings
 NewAdmin.Size = UDim2.new(0, 340, 0, 30)
-NewAdmin.Text = Setting
+NewAdmin.Text = ADMIN
 NewAdmin.BackgroundColor3 = Color3.fromRGB(Color1, Color2, Color3)
 NewAdmin.TextSize = 15
 NewAdmin.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -728,3 +728,5 @@ NSetting("Theme:", 255, 255, 0, function()
 HD.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
 HDLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
 end)
+
+Admin(" ...player.Name")
