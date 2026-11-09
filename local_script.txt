@@ -223,8 +223,15 @@ CommandBar.FocusLost:Connect(function(enterPressed)
 	if input:sub(1, 1) ~= ";" then return end
 	
 	local arguments = string.split(input:sub(2), " ")
-	local command = string.lower(arguments)
-	local targetName = arguments
+	local command = string.lower(arguments[1] or "")
+	local targetName = arguments[2]
 	
-	AdminEvent:FireServer(command, targetName)
+	local customReason = nil
+	if #arguments > 2 then
+		customReason = table.concat(arguments, " ", 3)
+	end
+	
+	if command ~= "" then
+		AdminEvent:FireServer(command, targetName, customReason)
+	end
 end)
