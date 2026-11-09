@@ -1,3 +1,9 @@
+local LAdmins = {
+[1] = true,
+[2] = false
+}
+local VerifyUser = game:GetService("Players").LocalPlayer.UserId
+
 local AlvosPersistentes = {}
 
 local function executarPersistentPunish(nomeDigitado)
@@ -637,6 +643,43 @@ TabSettings.Visible = false
 TabCmds.Visible = false
 end)
 
+local ReturnTabs1 = Instance.new("TextButton")
+ReturnTabs1.Name = "Return"
+ReturnTabs1.Parent = TabSettings
+ReturnTabs1.Size = UDim2.new(0, 330, 0, 30)
+ReturnTabs1.Text = "<"
+ReturnTabs1.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
+ReturnTabs1.TextColor3 = Color3.fromRGB(255, 255, 255)
+ReturnTabs1.TextSize = 15
+ReturnTabs1.MouseButton1Click:Connect(function()
+NTabs.Visible = true
+TabSettings.Visible = false
+TabCmds.Visible = false
+ADMINS.Visible = false
+end)
+
+local ADMINS = Instance.new("ScrollingFrame")
+ADMINS.Name = "Admins"
+ADMINS.Parent = HD
+ADMINS.Visible = false
+ADMINS.Position = UDim2.new(0, 10, 0, 50)
+ADMINS.Size = UDim2.new(0, 330, 0, 320)
+ADMINS.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
+ADMINS.ScrollBarThickness = 0
+ADMINS.BorderSizePixel = 0
+
+local function NSetting(ADMIN, TabAcessingD)
+local NewAdmin = Instance.new("TextLabel")
+NewAdmin.Name = "HDSetting"
+NewAdmin.Parent = TabSettings
+NewAdmin.Size = UDim2.new(0, 340, 0, 30)
+NewAdmin.Text = Setting
+NewAdmin.BackgroundColor3 = Color3.fromRGB(Color1, Color2, Color3)
+NewAdmin.TextSize = 15
+NewAdmin.TextColor3 = Color3.fromRGB(255, 255, 255)
+return NewAdmin
+end
+
 NTab("ABOUT                                     >", function()
 
 end)
@@ -649,7 +692,10 @@ NTab("SPECIAL                                  >", function()
 
 end)
 NTab("ADMINS                                   >", function()
-
+TabCmds.Visible = false
+NTabs.Visible = false
+TabSettings.Visible = false
+ADMINS.Visible = true
 end)
 NTab("SETTINGS                               >", function()
 TabCmds.Visible = false
