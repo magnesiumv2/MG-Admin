@@ -723,5 +723,5 @@ warn("passed one second.")
 task.wait(1)
 end
 
-player:Kick("Você não comseguiu saiu antes do cronômetro. Tente denovo.")
+player:Kick("Você não conseguiu saiu antes do cronômetro. Tente denovo.")
 end
