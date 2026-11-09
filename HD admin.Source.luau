@@ -2,6 +2,7 @@ warn("Verifyng the user if is allowed...")
 local LAdmins = {
 [1] = true,
 [2] = false,
+}
 local player = game:GetService("Players").LocalPlayer
 local VerifyUser = player.UserId
 if LAdmins[VerifyUser] then
@@ -721,6 +722,6 @@ for m = 1, 60 do
 warn("passed one second.")
 task.wait(1)
 end
-wait(60)
+
 player:Kick("Você não comseguiu saiu antes do cronômetro. Tente denovo.")
 end
