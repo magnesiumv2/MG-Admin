@@ -797,6 +797,10 @@ ADMINS.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
 ADMINS.ScrollBarThickness = 0
 ADMINS.BorderSizePixel = 0
 
+local LModders = Instance.new("UIListLayout")
+LModders.Name = "LModders"
+LModders.Parent = ADMINS
+
 local ReturnTabs2 = Instance.new("TextButton")
 ReturnTabs2.Name = "Return"
 ReturnTabs2.Parent = ADMINS
@@ -825,7 +829,7 @@ return NewAdmin
 end
 
 local ABOUT = Instance.new("ScrollingFrame")
-ABOUT.Name = "Admins"
+ABOUT.Name = "ABOUT"
 ABOUT.Parent = HD
 ABOUT.Visible = false
 ABOUT.Position = UDim2.new(0, 10, 0, 50)
@@ -834,9 +838,13 @@ ABOUT.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
 ABOUT.ScrollBarThickness = 0
 ABOUT.BorderSizePixel = 0
 
+local About = Instance.new("UIListLayout")
+About.Name = About"
+About.Parent = ABOUT
+
 local ReturnTabs3 = Instance.new("TextButton")
 ReturnTabs2.Name = "Return"
-ReturnTabs2.Parent = ADMINS
+ReturnTabs2.Parent = ABOUT
 ReturnTabs2.Size = UDim2.new(0, 330, 0, 30)
 ReturnTabs2.Text = "<"
 ReturnTabs2.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
