@@ -839,28 +839,28 @@ ABOUT.ScrollBarThickness = 0
 ABOUT.BorderSizePixel = 0
 
 local About = Instance.new("UIListLayout")
-About.Name = About"
+About.Name = "About"
 About.Parent = ABOUT
 
 local ReturnTabs3 = Instance.new("TextButton")
-ReturnTabs2.Name = "Return"
-ReturnTabs2.Parent = ABOUT
-ReturnTabs2.Size = UDim2.new(0, 330, 0, 30)
-ReturnTabs2.Text = "<"
-ReturnTabs2.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
-ReturnTabs2.TextColor3 = Color3.fromRGB(255, 255, 255)
-ReturnTabs2.TextSize = 15
-ReturnTabs2.MouseButton1Click:Connect(function()
+ReturnTabs3.Name = "Return"
+ReturnTabs3.Parent = ABOUT
+ReturnTabs3.Size = UDim2.new(0, 330, 0, 30)
+ReturnTabs3.Text = "<"
+ReturnTabs3.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
+ReturnTabs3.TextColor3 = Color3.fromRGB(255, 255, 255)
+ReturnTabs3.TextSize = 15
+ReturnTabs3.MouseButton1Click:Connect(function()
 NTabs.Visible = true
 TabSettings.Visible = false
 TabCmds.Visible = false
 ADMINS.Visible = false
 end)
 
-local function ABOUT(ABOUT)
+local function ABOUT(ABOUT1)
 local NewAbout = Instance.new("TextLabel")
 NewAbout.Name = "HDAdmin"
-NewAbout.Parent = ABOUT
+NewAbout.Parent = ABOUT1
 NewAbout.Size = UDim2.new(0, 340, 0, 30)
 NewAbout.Text = ABOUT
 NewAbout.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
