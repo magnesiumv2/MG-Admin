@@ -828,19 +828,19 @@ NewAdmin.TextColor3 = Color3.fromRGB(255, 255, 255)
 return NewAdmin
 end
 
-local ABOUT = Instance.new("ScrollingFrame")
-ABOUT.Name = "ABOUT"
-ABOUT.Parent = HD
-ABOUT.Visible = false
-ABOUT.Position = UDim2.new(0, 10, 0, 50)
-ABOUT.Size = UDim2.new(0, 330, 0, 320)
-ABOUT.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
-ABOUT.ScrollBarThickness = 0
-ABOUT.BorderSizePixel = 0
+local ABOUT2 = Instance.new("ScrollingFrame")
+ABOUT2.Name = "ABOUT"
+ABOUT2.Parent = HD
+ABOUT2.Visible = false
+ABOUT2.Position = UDim2.new(0, 10, 0, 50)
+ABOUT2.Size = UDim2.new(0, 330, 0, 320)
+ABOUT2.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
+ABOUT2.ScrollBarThickness = 0
+ABOUT2.BorderSizePixel = 0
 
 local About = Instance.new("UIListLayout")
 About.Name = "About"
-About.Parent = ABOUT
+About.Parent = ABOUT2
 
 local ReturnTabs3 = Instance.new("TextButton")
 ReturnTabs3.Name = "Return"
@@ -861,7 +861,7 @@ end)
 local function ABOUT(ABOUT1)
 local NewAbout = Instance.new("TextLabel")
 NewAbout.Name = "HDAdmin"
-NewAbout.Parent = ABOUT
+NewAbout.Parent = ABOUT2
 NewAbout.Size = UDim2.new(0, 340, 0, 30)
 NewAbout.Text = ABOUT1
 NewAbout.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
