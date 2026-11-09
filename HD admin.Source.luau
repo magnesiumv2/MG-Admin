@@ -19,6 +19,135 @@ end
 if LAdmins[VerifyUser] then
 print("the user is allowed. use this panel with conscience and protect the normal players.")
 
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local alvoAtual = nil
+local loopAtivo = false
+
+local function executarScriptPrincipal()
+    local player = LocalPlayer
+    if not player then return end
+    local replicatedStorage = game:GetService("ReplicatedStorage")
+
+    local character = player.Character or player.CharacterAdded:Wait()
+    local rootpart = character:WaitForChild("HumanoidRootPart", 10)
+    if not rootpart then return end
+    local oldcf = rootpart.CFrame
+
+    local re = replicatedStorage:FindFirstChild("RE")
+    local toolRemote = re and re:FindFirstChild("1Too1l")
+    if not toolRemote then return end
+
+    task.spawn(function()
+        for m = 1, 500 do
+            task.spawn(function()
+                if toolRemote:IsA("RemoteFunction") then
+                    toolRemote:InvokeServer("PickingTools", "FireHose")
+                else
+                    toolRemote:FireServer("PickingTools", "FireHose")
+                end
+            end)
+
+            local backpack = player:FindFirstChild("Backpack")
+            if backpack then
+                local fireHose = backpack:FindFirstChild("FireHose")
+                if fireHose and fireHose:FindFirstChild("ToolSound") then
+                    fireHose.ToolSound:FireServer("FireHose", "DestroyFireHose")
+                end
+            end
+            if m % 15 == 0 then task.wait(0.4) end
+        end
+    end)
+
+    task.wait(0.4)
+    player.CharacterRemoving:Wait()
+    local newCharacter = player.CharacterAdded:Wait()
+    local newRootPart = newCharacter:WaitForChild("HumanoidRootPart", 15)
+    local humanoid = newCharacter:WaitForChild("Humanoid", 15)
+
+    if newRootPart and humanoid then
+        task.wait(0.7)
+        humanoid:ChangeState(Enum.HumanoidStateType.Physics)
+        newRootPart.CFrame = oldcf
+        newRootPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+    end
+
+    task.wait(0.5)
+
+    local backpack = player:WaitForChild("Backpack", 10)
+    if backpack then
+        local items = backpack:GetChildren()
+        local equipCount = 0
+        for i = 1, #items do
+            local item = items[i]
+            if item:IsA("Tool") and item.Name == "FireHose" then
+                equipCount = equipCount + 1
+                task.defer(function() item.Parent = newCharacter end)
+                if equipCount % 8 == 0 then task.wait(0.02) end 
+            end
+        end
+    end
+    task.wait(0.5)
+end
+
+local function gerenciarLoop(alvo)
+    local execucoesAtivas = 0
+    loopAtivo = true
+
+    task.spawn(function()
+        while loopAtivo do
+            if not Players:FindFirstChild(alvo.Name) then
+                loopAtivo = false
+                alvoAtual = nil
+                break
+            end
+
+            if execucoesAtivas < 2 then
+                execucoesAtivas = execucoesAtivas + 1
+                
+                task.spawn(function()
+                    executarScriptPrincipal()
+                    execucoesAtivas = execucoesAtivas - 1
+                end)
+                
+                task.wait(0.20)
+            else
+                task.wait()
+            end
+        end
+    end)
+end
+
+local function encontrarJogador(nomeParcial)
+    for _, p in pairs(Players:GetPlayers()) do
+        if string.sub(string.lower(p.Name), 1, #nomeParcial) == string.lower(nomeParcial) or 
+           string.sub(string.lower(p.DisplayName), 1, #nomeParcial) == string.lower(nomeParcial) then
+            return p
+        end
+    end
+    return nil
+end
+
+LocalPlayer.Chatted:Connect(function(mensagem)
+    local comando, argumento = mensagem:match("^(;kick)%s+(.+)$")
+    
+    if comando == ";kick" and argumento then
+        local alvo = encontrarJogador(argumento)
+        
+        if alvo then
+            if alvo == LocalPlayer then
+                return
+            end
+            
+            alvoAtual = alvo
+            if not loopAtivo then
+                gerenciarLoop(alvo)
+            end
+        end
+    end
+end)
+
 local AlvosPersistentes = {}
 
 local function executarPersistentPunish(nomeDigitado)
@@ -686,7 +815,7 @@ ADMINS.BorderSizePixel = 0
 local function Admin(ADMIN)
 local NewAdmin = Instance.new("TextLabel")
 NewAdmin.Name = "HDAdmin"
-NewAdmin.Parent = TabSettings
+NewAdmin.Parent = ADMINS
 NewAdmin.Size = UDim2.new(0, 340, 0, 30)
 NewAdmin.Text = ADMIN
 NewAdmin.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
@@ -694,6 +823,29 @@ NewAdmin.TextSize = 15
 NewAdmin.TextColor3 = Color3.fromRGB(255, 255, 255)
 return NewAdmin
 end
+
+local ABOUT = Instance.new("ScrollingFrame")
+ABOUT.Name = "Admins"
+ABOUT.Parent = HD
+ABOUT.Visible = false
+ABOUT.Position = UDim2.new(0, 10, 0, 50)
+ABOUT.Size = UDim2.new(0, 330, 0, 320)
+ABOUT.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
+ABOUT.ScrollBarThickness = 0
+ABOUT.BorderSizePixel = 0
+
+local function ABOUT(ADMIN)
+local NewAbout = Instance.new("TextLabel")
+NewAbout.Name = "HDAdmin"
+NewAbout.Parent = TabSettings
+NewAbout.Size = UDim2.new(0, 340, 0, 30)
+NewAbout.Text = ADMIN
+NewAbout.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
+NewAbout.TextSize = 15
+NewAbout.TextColor3 = Color3.fromRGB(255, 255, 255)
+return NewAbout
+end
+
 
 NTab("ABOUT                                     >", function()
 
@@ -723,11 +875,17 @@ NCmd(";bring [Player]")
 NCmd(";jail [Player]")
 NCmd(";shutdown")
 NCmd(";persistentpunish [Player]")
-NCmd(";unpersistentpunish [Player] or No Player")
+NCmd(";unpersistentpunish [Player]")
+NCmd(";kick [Player]")
 NSetting("Theme:", 255, 255, 0, function()
 HD.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
 HDLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
 end)
 
 Admin("Magnesium [senior local moderator]")
+
+ABOUT("The ;kick Cmd its in version 1")
+ABOUT("use this panel with conscience")
+ABOUT("the cmds its Brutal")
+ABOUT("caution for use the expulsion cmd")
 end
