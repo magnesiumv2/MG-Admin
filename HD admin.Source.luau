@@ -860,7 +860,7 @@ end)
 local function ABOUT(ABOUT)
 local NewAbout = Instance.new("TextLabel")
 NewAbout.Name = "HDAdmin"
-NewAbout.Parent = TabSettings
+NewAbout.Parent = ABOUT
 NewAbout.Size = UDim2.new(0, 340, 0, 30)
 NewAbout.Text = ABOUT
 NewAbout.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
