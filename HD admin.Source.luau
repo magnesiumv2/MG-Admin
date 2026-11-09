@@ -855,6 +855,7 @@ NTabs.Visible = true
 TabSettings.Visible = false
 TabCmds.Visible = false
 ADMINS.Visible = false
+ABOUT.Visible = false
 end)
 
 local function ABOUT(ABOUT1)
