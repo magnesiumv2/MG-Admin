@@ -15,6 +15,7 @@ end
 player:Kick("Você não conseguiu sair do servidor antes do cronômetro. Tente denovo.")
 return
 end
+
 if LAdmins[VerifyUser] then
 print("the user is allowed. use this panel with conscience and protect the normal players.")
 
