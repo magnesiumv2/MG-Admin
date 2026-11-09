@@ -1,0 +1,46 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+
+local AdminEvent = Instance.new("RemoteEvent")
+AdminEvent.Name = "AdminEvent"
+AdminEvent.Parent = ReplicatedStorage
+
+local function findPlayer(nameString)
+	if nameString == "me" then return nil end
+	for _, player in ipairs(Players:GetPlayers()) do
+		if string.lower(player.Name):sub(1, #nameString) == string.lower(nameString) then
+			return player
+		end
+	end
+	return nil
+end
+
+AdminEvent.OnServerEvent:Connect(function(player, command, targetName)
+	local targetPlayer = targetName and findPlayer(targetName)
+	
+	if command == "kill" and targetPlayer and targetPlayer.Character then
+		local humanoid = targetPlayer.Character:FindFirstChildOfClass("Humanoid")
+		if humanoid then humanoid.Health = 0 end
+		
+	elseif command == "kick" and targetPlayer then
+		targetPlayer:Kick("Você foi expulso por violar as diretrizes de segurança.")
+		
+	elseif command == "punish" and targetPlayer and targetPlayer.Character then
+		targetPlayer.Character.Parent = game:GetService("Lighting")
+		
+	elseif command == "bring" and targetPlayer and targetPlayer.Character and player.Character then
+		local targetRoot = targetPlayer.Character:FindFirstChild("HumanoidRootPart")
+		local localRoot = player.Character:FindFirstChild("HumanoidRootPart")
+		if targetRoot and localRoot then
+			targetRoot.CFrame = localRoot.CFrame * CFrame.new(0, 0, -3)
+		end
+		
+	elseif command == "jail" and targetPlayer then
+		print("Prendendo " .. targetPlayer.Name)
+		
+	elseif command == "shutdown" then
+		for _, p in ipairs(Players:GetPlayers()) do
+			p:Kick("Servidor desligado pelo administrador.")
+		end
+	end
+end)
