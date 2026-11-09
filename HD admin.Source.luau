@@ -6,7 +6,7 @@ local LAdmins = {
 local player = game:GetService("Players").LocalPlayer
 local VerifyUser = player.UserId
 if not LAdmins[VerifyUser] then
-error("the user no is allowed. wait 1 min to kick the user")
+warn("the user no is allowed. wait 1 min to kick the user")
 for m = 1, 60 do
 warn("passed one second")
 task.wait(1)
