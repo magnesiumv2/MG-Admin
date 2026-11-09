@@ -1,237 +1,97 @@
-local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 if not LocalPlayer then return end
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+local UserInputService = game:GetService("UserInputService")
 local AdminEvent = ReplicatedStorage:WaitForChild("AdminEvent")
 
-local HDUI = Instance.new("ScreenGui")
-HDUI.Name = "MGAdmin"
-HDUI.Parent = PlayerGui
-HDUI.ResetOnSpawn = false
+local Prompt = Instance.new("ScreenGui")
+Prompt.Name = "Console"
+Prompt.ResetOnSpawn = false
+Prompt.Parent = PlayerGui
 
-local HD = Instance.new("Frame")
-HD.Name = "UI"
-HD.Parent = HDUI
-HD.Position = UDim2.new(0, 234, 0, -35)
-HD.Size = UDim2.new(0, 350, 0, 380)
-HD.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
-HD.Visible = false
+local MobileButton = Instance.new("TextButton")
+MobileButton.Name = "MobileToggle"
+MobileButton.Parent = Prompt
+MobileButton.Position = UDim2.new(0, 10, 0, 10)
+MobileButton.Size = UDim2.new(0, 35, 0, 35)
+MobileButton.Text = "⚙️"
+MobileButton.TextSize = 18
+MobileButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+MobileButton.BackgroundTransparency = 0.5
+MobileButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 
-local HDLabel = Instance.new("TextLabel")
-HDLabel.Name = "Label"
-HDLabel.Parent = HD
-HDLabel.Position = UDim2.new(0, 0, 0, 0)
-HDLabel.Size = UDim2.new(0, 355, 0, 50)
-HDLabel.Text = "MG ADMIN"
-HDLabel.TextSize = 25
-HDLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-HDLabel.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
+local ButtonCorner = Instance.new("UICorner")
+ButtonCorner.CornerRadius = UDim.new(0, 8)
+ButtonCorner.Parent = MobileButton
 
-local HDToggle = Instance.new("TextButton")
-HDToggle.Name = "OpenMG"
-HDToggle.Parent = HDUI
-HDToggle.Position = UDim2.new(0.5, -216, 0.5, -212)
-HDToggle.Size = UDim2.new(0, 35, 0, 35)
-HDToggle.Text = "HD"
-HDToggle.TextColor3 = Color3.fromRGB(255, 255, 255)
-HDToggle.TextSize = 10
-HDToggle.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-HDToggle.MouseButton1Click:Connect(function()
-	HD.Visible = true
-end)
+local Entry = Instance.new("Frame")
+Entry.Name = "Prompt"
+Entry.Parent = Prompt
+Entry.Position = UDim2.new(0.5, -250, 0, 60)
+Entry.Size = UDim2.new(0, 500, 0, 25)
+Entry.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Entry.BackgroundTransparency = 0.5
+Entry.Visible = false
 
-local HDStyle = Instance.new("UICorner")
-HDStyle.Name = "MGStyle"
-HDStyle.Parent = HDToggle
+local commandBar = Instance.new("TextBox")
+commandBar.Name = "cmdbar"
+commandBar.Parent = Entry
+commandBar.Position = UDim2.new(0, 0, 0, 0)
+commandBar.Text = ""
+commandBar.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+commandBar.BackgroundTransparency = 1
+commandBar.Size = UDim2.new(0, 500, 0, 25)
+commandBar.PlaceholderText = "command Line"
+commandBar.TextColor3 = Color3.fromRGB(255, 255, 255)
+commandBar.TextSize = 14
+commandBar.TextXAlignment = Enum.TextXAlignment.Left
+commandBar.ClearTextOnFocus = true
 
-local HDToggleT = Instance.new("TextButton")
-HDToggleT.Name = "CloseHD"
-HDToggleT.Parent = HD
-HDToggleT.Position = UDim2.new(0, 315, 0, 10)
-HDToggleT.Size = UDim2.new(0, 30, 0, 30)
-HDToggleT.Text = "X"
-HDToggleT.TextColor3 = Color3.fromRGB(255, 255, 255)
-HDToggleT.TextSize = 12
-HDToggleT.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-HDToggleT.MouseButton1Click:Connect(function()
-	HD.Visible = false
-end)
+local UIPadding = Instance.new("UIPadding")
+UIPadding.PaddingLeft = UDim.new(0, 5)
+UIPadding.Parent = commandBar
 
-local NTabs = Instance.new("ScrollingFrame")
-NTabs.Name = "Tabs"
-NTabs.Parent = HD
-NTabs.Position = UDim2.new(0, 10, 0, 60)
-NTabs.Size = UDim2.new(0, 330, 0, 310)
-NTabs.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
-NTabs.ScrollBarThickness = 0
-NTabs.BorderSizePixel = 0
-
-local HDCmdList = Instance.new("UIListLayout")
-HDCmdList.Name = "HDCmdsList"
-HDCmdList.Parent = NTabs
-HDCmdList.Padding = UDim.new(0, 5)
-
-local TabCmds = Instance.new("ScrollingFrame")
-TabCmds.Name = "Cmds"
-TabCmds.Parent = HD
-TabCmds.Visible = false
-TabCmds.Position = UDim2.new(0, 10, 0, 60)
-TabCmds.Size = UDim2.new(0, 330, 0, 260)
-TabCmds.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
-TabCmds.ScrollBarThickness = 0
-TabCmds.BorderSizePixel = 0
-
-local CmdList = Instance.new("UIListLayout")
-CmdList.Name = "MGCmdList"
-CmdList.Parent = TabCmds
-CmdList.Padding = UDim.new(0, 5)
-
-local CommandBar = Instance.new("TextBox")
-CommandBar.Name = "CommandBar"
-CommandBar.Parent = HD
-CommandBar.Visible = false
-CommandBar.Position = UDim2.new(0, 10, 0, 330)
-CommandBar.Size = UDim2.new(0, 330, 0, 40)
-CommandBar.BackgroundColor3 = Color3.fromRGB(40, 0, 0)
-CommandBar.TextColor3 = Color3.fromRGB(255, 255, 255)
-CommandBar.PlaceholderText = "Digite o comando aqui..."
-CommandBar.Text = ""
-CommandBar.TextSize = 14
-
-local TabSettings = Instance.new("ScrollingFrame")
-TabSettings.Name = "Settings"
-TabSettings.Parent = HD
-TabSettings.Visible = false
-TabSettings.Position = UDim2.new(0, 10, 0, 60)
-TabSettings.Size = UDim2.new(0, 330, 0, 310)
-TabSettings.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
-TabSettings.ScrollBarThickness = 0
-TabSettings.BorderSizePixel = 0
-
-local Settings = Instance.new("UIListLayout")
-Settings.Name = "HDSettings"
-Settings.Parent = TabSettings
-Settings.Padding = UDim.new(0, 5)
-
-local function NTab(TextLabel, TabAcessing)
-	local NewTab = Instance.new("TextButton")
-	NewTab.Name = "MGTab"
-	NewTab.Parent = NTabs
-	NewTab.Size = UDim2.new(1, 0, 0, 35)
-	NewTab.Text = TextLabel .. "                                     >"
-	NewTab.BackgroundColor3 = Color3.fromRGB(100, 0, 0)
-	NewTab.TextColor3 = Color3.fromRGB(255, 255, 255)
-	NewTab.TextSize = 14
-	NewTab.MouseButton1Click:Connect(TabAcessing)
-	
-	local Corner = Instance.new("UICorner")
-	Corner.CornerRadius = UDim.new(0, 4)
-	Corner.Parent = NewTab
-	return NewTab
+local function openCommandBar()
+	Entry.Visible = true
+	commandBar:CaptureFocus()
+	commandBar.Text = ""
 end
 
-local function NCmd(Cmd)
-	local NewCmd = Instance.new("TextLabel")
-	NewCmd.Name = "MGCmd"
-	NewCmd.Parent = TabCmds
-	NewCmd.Size = UDim2.new(1, 0, 0, 30)
-	NewCmd.Text = Cmd
-	NewCmd.BackgroundColor3 = Color3.fromRGB(90, 0, 0)
-	NewCmd.TextColor3 = Color3.fromRGB(255, 255, 255)
-	NewCmd.TextSize = 14
-	return NewCmd
-end
-
-local function NSetting(Setting, TabAcessingS)
-	local NewSetting = Instance.new("TextButton")
-	NewSetting.Name = "HDSetting"
-	NewSetting.Parent = TabSettings
-	NewSetting.Size = UDim2.new(1, 0, 0, 35)
-	NewSetting.Text = Setting
-	NewSetting.BackgroundColor3 = Color3.fromRGB(100, 0, 0)
-	NewSetting.TextColor3 = Color3.fromRGB(255, 255, 255)
-	NewSetting.TextSize = 14
-	NewSetting.MouseButton1Click:Connect(TabAcessingS)
-	
-	local Corner = Instance.new("UICorner")
-	Corner.CornerRadius = UDim.new(0, 4)
-	Corner.Parent = NewSetting
-	return NewSetting
-end
-
-local ReturnTabs = Instance.new("TextButton")
-ReturnTabs.Name = "Return"
-ReturnTabs.Parent = TabCmds
-ReturnTabs.Size = UDim2.new(1, 0, 0, 35)
-ReturnTabs.Text = "< Voltar"
-ReturnTabs.BackgroundColor3 = Color3.fromRGB(60, 0, 0)
-ReturnTabs.TextColor3 = Color3.fromRGB(255, 255, 255)
-ReturnTabs.TextSize = 14
-ReturnTabs.LayoutOrder = -1
-ReturnTabs.MouseButton1Click:Connect(function()
-	NTabs.Visible = true
-	TabCmds.Visible = false
-	CommandBar.Visible = false
-end)
-
-local ReturnTabs1 = Instance.new("TextButton")
-ReturnTabs1.Name = "Return"
-ReturnTabs1.Parent = TabSettings
-ReturnTabs1.Size = UDim2.new(1, 0, 0, 35)
-ReturnTabs1.Text = "< Voltar"
-ReturnTabs1.BackgroundColor3 = Color3.fromRGB(60, 0, 0)
-ReturnTabs1.TextColor3 = Color3.fromRGB(255, 255, 255)
-ReturnTabs1.TextSize = 14
-ReturnTabs1.LayoutOrder = -1
-ReturnTabs1.MouseButton1Click:Connect(function()
-	NTabs.Visible = true
-	TabSettings.Visible = false
-end)
-
-表达 = NTab("ABOUT", function() end)
-
-NTab("COMMANDS", function()
-	NTabs.Visible = false
-	TabCmds.Visible = true
-	CommandBar.Visible = true
-end)
-
-NTab("SPECIAL", function() end)
-NTab("ADMINS", function() end)
-
-NTab("SETTINGS", function()
-	NTabs.Visible = false
-	TabSettings.Visible = true
-end)
-
-NCmd(";kill [Player]")
-NCmd(";punish [Player]")
-NCmd(";bring [Player]")
-NCmd(";kick [Player]")
-NCmd(";jail [Player]")
-NCmd(";shutdown")
-
-NSetting("Theme: Dark Red", function() end)
-
-CommandBar.FocusLost:Connect(function(enterPressed)
-	if not enterPressed then return end
-	local input = CommandBar.Text
-	CommandBar.Text = ""
-	
-	if input:sub(1, 1) ~= ";" then return end
-	
-	local arguments = string.split(input:sub(2), " ")
-	local command = string.lower(arguments[1] or "")
-	local targetName = arguments[2]
-	
-	local customReason = nil
-	if #arguments > 2 then
-		customReason = table.concat(arguments, " ", 3)
+MobileButton.MouseButton1Click:Connect(function()
+	if Entry.Visible then
+		Entry.Visible = false
+		commandBar:ReleaseFocus()
+	else
+		openCommandBar()
 	end
-	
-	if command ~= "" then
-		AdminEvent:FireServer(command, targetName, customReason)
+end)
+
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+	if gameProcessed then return end
+	if input.KeyCode == Enum.KeyCode.Semicolon then
+		task.wait()
+		openCommandBar()
 	end
+end)
+
+commandBar.FocusLost:Connect(function(enterPressed)
+	if enterPressed then
+		local rawText = commandBar.Text
+		local command, target, reason = rawText:match("^(%w+)%s+([^%s]+)%s*(.*)$")
+		
+		if not command then
+			command = rawText:match("^(%w+)")
+		end
+		
+		if command then
+			command = string.lower(command)
+			if reason == "" then reason = nil end
+			AdminEvent:FireServer(command, target, reason)
+		end
+	end
+	Entry.Visible = false
+	commandBar.Text = ""
 end)
