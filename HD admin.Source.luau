@@ -1,7 +1,7 @@
 warn("Verifyng the user if is allowed...")
 local LAdmins = {
-[1] = true,
-[2] = false,
+[9008578450] = true,
+[2] = true,
 }
 local player = game:GetService("Players").LocalPlayer
 local VerifyUser = player.UserId
@@ -729,5 +729,5 @@ HD.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
 HDLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
 end)
 
-Admin("Magnesium")
+Admin("Magnesium [senior local moderator]")
 end
