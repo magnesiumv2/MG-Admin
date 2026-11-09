@@ -28,7 +28,6 @@ AdminEvent.OnServerEvent:Connect(function(player, command, targetName, customRea
 		player:Kick("Unauthorized access to admin panel.")
 		return
 	end
-
 	local targetPlayer = findPlayer(targetName)
 	
 	if command == "kill" and targetPlayer and targetPlayer.Character then
@@ -52,6 +51,7 @@ AdminEvent.OnServerEvent:Connect(function(player, command, targetName, customRea
 		if targetRoot and localRoot then
 			targetRoot.CFrame = localRoot.CFrame * CFrame.new(0, 0, -3)
 		end
+		
 	elseif command == "jail" and targetPlayer then
 		if targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
 			targetPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(0, -100, 0)
