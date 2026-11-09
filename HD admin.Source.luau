@@ -631,13 +631,13 @@ local Settings = Instance.new("UIListLayout")
 Settings.Name = "HDSettings"
 Settings.Parent = TabSettings
 
-local function NSetting(Setting, TabAcessingS, Color1, Color2, Color3)
+local function NSetting(Setting, TabAcessingS, ColorR, ColorG, ColorB)
 local NewSetting = Instance.new("TextButton")
 NewSetting.Name = "HDSetting"
 NewSetting.Parent = TabSettings
 NewSetting.Size = UDim2.new(0, 340, 0, 30)
 NewSetting.Text = Setting
-NewSetting.BackgroundColor3 = Color3.fromRGB(Color1, Color2, Color3)
+NewSetting.BackgroundColor3 = Color3.fromRGB(ColorR, ColorG, ColorB)
 NewSetting.TextSize = 15
 NewSetting.TextColor3 = Color3.fromRGB(255, 255, 255)
 NewSetting.MouseButton1Click:Connect(TabAcessingS)
@@ -689,7 +689,7 @@ NewAdmin.Name = "HDAdmin"
 NewAdmin.Parent = TabSettings
 NewAdmin.Size = UDim2.new(0, 340, 0, 30)
 NewAdmin.Text = ADMIN
-NewAdmin.BackgroundColor3 = Color3.fromRGB(Color1, Color2, Color3)
+NewAdmin.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
 NewAdmin.TextSize = 15
 NewAdmin.TextColor3 = Color3.fromRGB(255, 255, 255)
 return NewAdmin
@@ -730,3 +730,4 @@ HDLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
 end)
 
 Admin("Magnesium")
+end
