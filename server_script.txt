@@ -9,18 +9,63 @@ if not AdminEvent then
 end
 
 local AllowedAdmins = {
-    [Your UserId here] = true,
-    [UserId of a Moderator] = true,
+	[12345678] = true,
+	[87654321] = true,
 }
 
-local function findPlayer(nameString)
-	if not nameString or nameString == "me" then return nil end
+local function findPlayer(nameString, executor)
+	if not nameString or nameString == "" then return nil end
+	
+	local lowerName = string.lower(nameString)
+	if lowerName == "me" then
+		return executor
+	end
+	
 	for _, player in ipairs(Players:GetPlayers()) do
-		if string.lower(player.Name):sub(1, #nameString) == string.lower(nameString) then
+		if string.lower(player.Name):sub(1, #lowerName) == lowerName then
 			return player
 		end
 	end
 	return nil
+end
+
+local function createJail(targetPlayer)
+	local char = targetPlayer.Character
+	local root = char and char:FindFirstChild("HumanoidRootPart")
+	if not root then return end
+
+	local oldJail = workspace:FindFirstChild("Jail_" .. targetPlayer.Name)
+	if oldJail then oldJail:Destroy() end
+
+	local jailModel = Instance.new("Model")
+	jailModel.Name = "Jail_" .. targetPlayer.Name
+
+	local center = root.CFrame
+	local size = 8
+	local thick = 1
+
+	local walls = {
+		{CFrame.new(0, -size/2, 0), Vector3.new(size, thick, size)},
+		{CFrame.new(0, size/2, 0), Vector3.new(size, thick, size)},
+		{CFrame.new(size/2, 0, 0), Vector3.new(thick, size, size)},
+		{CFrame.new(-size/2, 0, 0), Vector3.new(thick, size, size)},
+		{CFrame.new(0, 0, size/2), Vector3.new(size, size, thick)},
+		{CFrame.new(0, 0, -size/2), Vector3.new(size, size, thick)}
+	}
+
+	for _, wallData in ipairs(walls) do
+		local part = Instance.new("Part")
+		part.Anchored = true
+		part.CanCollide = true
+		part.Transparency = 0.6
+		part.Material = Enum.Material.Glass
+		part.Color = Color3.fromRGB(0, 170, 255)
+		part.Size = wallData[2]
+		part.CFrame = center * wallData[1]
+		part.Parent = jailModel
+	end
+
+	jailModel.Parent = workspace
 end
 
 AdminEvent.OnServerEvent:Connect(function(player, command, targetName, customReason)
@@ -28,35 +73,46 @@ AdminEvent.OnServerEvent:Connect(function(player, command, targetName, customRea
 		player:Kick("Unauthorized access to admin panel.")
 		return
 	end
-	local targetPlayer = findPlayer(targetName)
-	
+
+	local targetPlayer = findPlayer(targetName, player)
+
 	if command == "kill" and targetPlayer and targetPlayer.Character then
 		local humanoid = targetPlayer.Character:FindFirstChildOfClass("Humanoid")
 		if humanoid then humanoid.Health = 0 end
-		
+
 	elseif command == "kick" and targetPlayer then
 		local kickMessage = customReason or "You have been kicked by an administrator."
 		targetPlayer:Kick(kickMessage)
-		
+
 	elseif command == "punish" and targetPlayer and targetPlayer.Character then
+		local root = targetPlayer.Character:FindFirstChild("HumanoidRootPart")
+		if root then root.Anchored = true end
+		
 		for _, part in ipairs(targetPlayer.Character:GetChildren()) do
 			if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
 				part.Transparency = 1
 				part.CanCollide = false
 			end
 		end
+
 	elseif command == "bring" and targetPlayer and targetPlayer.Character and player.Character then
 		local targetRoot = targetPlayer.Character:FindFirstChild("HumanoidRootPart")
 		local localRoot = player.Character:FindFirstChild("HumanoidRootPart")
 		if targetRoot and localRoot then
+			targetRoot:SetAttribute("ServerTeleporting", true)
 			targetRoot.CFrame = localRoot.CFrame * CFrame.new(0, 0, -3)
+			task.delay(0.5, function()
+				if targetRoot then targetRoot:SetAttribute("ServerTeleporting", nil) end
+			end)
 		end
-		
+
 	elseif command == "jail" and targetPlayer then
-		if targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
-			targetPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(0, -100, 0)
-		end
-		
+		createJail(targetPlayer)
+
+	elseif command == "unjail" and targetPlayer then
+		local jail = workspace:FindFirstChild("Jail_" .. targetPlayer.Name)
+		if jail then jail:Destroy() end
+
 	elseif command == "shutdown" then
 		for _, p in ipairs(Players:GetPlayers()) do
 			p:Kick("Server has been shut down by an administrator.")
