@@ -9,8 +9,8 @@ if not AdminEvent then
 end
 
 local AllowedAdmins = {
-	[12345678] = true,
-	[87654321] = true,
+	[YourUserIdHere] = true,
+	[ModeratorUserIdHere] = true,
 }
 
 local function findPlayer(nameString, executor)
@@ -70,7 +70,7 @@ end
 
 AdminEvent.OnServerEvent:Connect(function(player, command, targetName, customReason)
 	if not AllowedAdmins[player.UserId] then
-		player:Kick("Unauthorized access to admin panel.")
+		warn("Denied. Not recognized or No permission.")
 		return
 	end
 
@@ -115,7 +115,7 @@ AdminEvent.OnServerEvent:Connect(function(player, command, targetName, customRea
 
 	elseif command == "shutdown" then
 		for _, p in ipairs(Players:GetPlayers()) do
-			p:Kick("Server has been shut down by an administrator.")
+			p:Kick("You have been disconnected. The server has been shut down.")
 		end
 	end
 end)
